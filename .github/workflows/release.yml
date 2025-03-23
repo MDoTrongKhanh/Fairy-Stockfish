@@ -14,23 +14,23 @@ jobs:
     runs-on: windows-2022
 
     steps:
-      - uses: al-cheb/configure-pagefile-action@v1.4	
-        with:	
+      - uses: al-cheb/configure-pagefile-action@v1.4
+        with:
             minimum-size: 16GB
             maximum-size: 16GB
             disk-root: "C:"
 
       - uses: actions/checkout@v4
 
+      - name: Download Latest NNUE
+        run: |
+          curl -L -o nnue/latest.nnue https://github.com/official-stockfish/Stockfish/releases/latest/download/nn-eba324f53048.nnue
+
       - name: make
-        run: cd src && make clean && make -j build COMP=mingw ARCH=${{ matrix.arch }} EXE=fairy-stockfish_${{ matrix.arch }}.exe && strip fairy-stockfish_${{ matrix.arch }}.exe
+        run: cd src && make clean && make -j build COMP=mingw ARCH=${{ matrix.arch }} EXE=fairy-stockfish_${{ matrix.arch }}.exe NNUE_PATH=../nnue/latest.nnue && strip fairy-stockfish_${{ matrix.arch }}.exe
 
       - name: make largeboards
-        run: cd src && make clean && make -j build COMP=mingw ARCH=${{ matrix.arch }} EXE=fairy-stockfish-largeboards_${{ matrix.arch }}.exe largeboards=yes && strip fairy-stockfish-largeboards_${{ matrix.arch }}.exe
-
-      - name: make all
-        if: ${{ matrix.arch == 'x86-64' }}
-        run: cd src && make clean && make -j build COMP=mingw ARCH=${{ matrix.arch }} EXE=fairy-stockfish-all_${{ matrix.arch }}.exe largeboards=yes all=yes && strip fairy-stockfish-all_${{ matrix.arch }}.exe
+        run: cd src && make clean && make -j build COMP=mingw ARCH=${{ matrix.arch }} EXE=fairy-stockfish-largeboards_${{ matrix.arch }}.exe largeboards=yes NNUE_PATH=../nnue/latest.nnue && strip fairy-stockfish-largeboards_${{ matrix.arch }}.exe
 
       - uses: actions/upload-artifact@v4
         with:
@@ -48,15 +48,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Download Latest NNUE
+        run: |
+          wget -O nnue/latest.nnue https://github.com/official-stockfish/Stockfish/releases/latest/download/nn-eba324f53048.nnue
+
       - name: make
-        run: cd src && make clean && make -j build COMP=gcc ARCH=${{ matrix.arch }} EXE=fairy-stockfish_${{ matrix.arch }} && strip fairy-stockfish_${{ matrix.arch }}
+        run: cd src && make clean && make -j build COMP=gcc ARCH=${{ matrix.arch }} EXE=fairy-stockfish_${{ matrix.arch }} NNUE_PATH=../nnue/latest.nnue && strip fairy-stockfish_${{ matrix.arch }}
 
       - name: make largeboards
-        run: cd src && make clean && make -j build COMP=gcc ARCH=${{ matrix.arch }} EXE=fairy-stockfish-largeboards_${{ matrix.arch }} largeboards=yes && strip fairy-stockfish-largeboards_${{ matrix.arch }}
-
-      - name: make all
-        if: ${{ matrix.arch == 'x86-64' }}
-        run: cd src && make clean && make -j build COMP=gcc ARCH=${{ matrix.arch }} EXE=fairy-stockfish-all_${{ matrix.arch }} largeboards=yes all=yes && strip fairy-stockfish-all_${{ matrix.arch }}
+        run: cd src && make clean && make -j build COMP=gcc ARCH=${{ matrix.arch }} EXE=fairy-stockfish-largeboards_${{ matrix.arch }} largeboards=yes NNUE_PATH=../nnue/latest.nnue && strip fairy-stockfish-largeboards_${{ matrix.arch }}
 
       - uses: actions/upload-artifact@v4
         with:
@@ -74,14 +74,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Download Latest NNUE
+        run: curl -L -o nnue/latest.nnue https://github.com/official-stockfish/Stockfish/releases/latest/download/nn-eba324f53048.nnue
+
       - name: make
-        run: cd src && make clean && make -j build COMP=clang ARCH=${{ matrix.arch }} EXE=fairy-stockfish_${{ matrix.arch }} && strip fairy-stockfish_${{ matrix.arch }}
-
-      - name: make largeboards
-        run: cd src && make clean && make -j build COMP=clang ARCH=${{ matrix.arch }} EXE=fairy-stockfish-largeboards_${{ matrix.arch }} largeboards=yes && strip fairy-stockfish-largeboards_${{ matrix.arch }}
-
-      - name: make all
-        run: cd src && make clean && make -j build COMP=clang ARCH=${{ matrix.arch }} EXE=fairy-stockfish-all_${{ matrix.arch }} largeboards=yes all=yes && strip fairy-stockfish-all_${{ matrix.arch }}
+        run: cd src && make clean && make -j build COMP=clang ARCH=${{ matrix.arch }} EXE=fairy-stockfish_${{ matrix.arch }} NNUE_PATH=../nnue/latest.nnue && strip fairy-stockfish_${{ matrix.arch }}
 
       - uses: actions/upload-artifact@v4
         with:
@@ -99,14 +96,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Download Latest NNUE
+        run: curl -L -o nnue/latest.nnue https://github.com/official-stockfish/Stockfish/releases/latest/download/nn-eba324f53048.nnue
+
       - name: make
-        run: cd src && make clean && make -j build COMP=clang ARCH=${{ matrix.arch }} EXE=fairy-stockfish_${{ matrix.arch }} && strip fairy-stockfish_${{ matrix.arch }}
-
-      - name: make largeboards
-        run: cd src && make clean && make -j build COMP=clang ARCH=${{ matrix.arch }} EXE=fairy-stockfish-largeboards_${{ matrix.arch }} largeboards=yes && strip fairy-stockfish-largeboards_${{ matrix.arch }}
-
-      - name: make all
-        run: cd src && make clean && make -j build COMP=clang ARCH=${{ matrix.arch }} EXE=fairy-stockfish-all_${{ matrix.arch }} largeboards=yes all=yes && strip fairy-stockfish-all_${{ matrix.arch }}
+        run: cd src && make clean && make -j build COMP=clang ARCH=${{ matrix.arch }} EXE=fairy-stockfish_${{ matrix.arch }} NNUE_PATH=../nnue/latest.nnue && strip fairy-stockfish_${{ matrix.arch }}
 
       - uses: actions/upload-artifact@v4
         with:
